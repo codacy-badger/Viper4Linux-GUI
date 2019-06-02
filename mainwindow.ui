@@ -65,10 +65,10 @@
         </rect>
        </property>
        <property name="minimum">
-        <number>50</number>
+        <number>20</number>
        </property>
        <property name="maximum">
-        <number>160</number>
+        <number>200</number>
        </property>
        <property name="value">
         <number>76</number>
