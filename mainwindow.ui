@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="bass">
      <property name="toolTipDuration">
@@ -2467,6 +2467,91 @@
        </property>
        <property name="invertedControls">
         <bool>false</bool>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="ddc">
+     <attribute name="title">
+      <string>DDC</string>
+     </attribute>
+     <widget class="QTableView" name="ddcTable">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>381</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="ddc_enable">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>10</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Enable DDC</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>100</y>
+        <width>101</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Bitrate</string>
+      </property>
+      <widget class="QRadioButton" name="ddc_sample48000">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>100</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>48000Hz</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="ddc_sample44100">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>100</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>44100Hz</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>

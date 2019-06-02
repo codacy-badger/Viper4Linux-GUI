@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <string>
 #include <iostream>
+#include <QSqlTableModel>
 using namespace std;
 namespace Ui {
 class MainWindow;
@@ -14,6 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    QSqlTableModel *model;
     Ui::MainWindow *ui;
     string getPath();
     string getStylesheet();
@@ -56,7 +58,7 @@ private slots:
     void SaveExternalFile();
 private:
     void updateeq(int);
-
+    bool createconnection();
     void setDynsys(const int* data);
     void loadConfig(const string& key, string value);
     void decodeAppConfig(const string& key, const string& value);

@@ -32,6 +32,11 @@
 #include "converter.h"
 #include <cctype>
 #include <cmath>
+#include <QtSql>
+#include <QSqlQuery>
+#include <QSqlDatabase>
+#include <QSqlError>
+
 using namespace std;
 
 static string path;
@@ -68,6 +73,31 @@ MainWindow::MainWindow(QWidget *parent) :
     menu->addAction("Save to file", this,SLOT(SaveExternalFile()));
     ui->toolButton->setMenu(menu);
 
+    if (!createconnection())
+        return;
+    model = new QSqlTableModel;
+
+    model = new QSqlTableModel(this);
+    model->setTable("DDCData");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+
+    model->setHeaderData(0, Qt::Horizontal, tr("ID"));
+    model->setHeaderData(1, Qt::Horizontal, tr("Vendor"));
+    model->setHeaderData(2, Qt::Horizontal, tr("CTranslate"));
+    model->setHeaderData(3, Qt::Horizontal, tr("Model"));
+    model->setHeaderData(4, Qt::Horizontal, tr("MTranslate"));
+    model->setHeaderData(5, Qt::Horizontal, tr("SR_44100_Coeffs"));
+    model->setHeaderData(6, Qt::Horizontal, tr("SR_48000_Coeffs"));
+
+
+    ui->ddcTable->setModel(model);
+    ui->ddcTable->resizeColumnsToContents();
+    ui->ddcTable->setColumnHidden(0, true);
+    ui->ddcTable->setColumnHidden(2, true);
+    ui->ddcTable->setColumnHidden(4, true);
+    ui->ddcTable->setColumnHidden(5, true);
+    ui->ddcTable->setColumnHidden(6, true);
     SetStyle();
     ConnectActions();
 }
@@ -75,6 +105,25 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+bool MainWindow::createconnection()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QFile::copy(":/ddc/ddc/ViPERDDC.db", "/home/tim/ViPERDDC.db");
+    db.setDatabaseName("/home/tim/ViPERDDC.db");
+    if (!db.open()) {
+        QMessageBox::critical(nullptr, QObject::tr("Cannot open DDC database"),
+                              QObject::tr("Unable to establish a database connection.\n"
+                                          "Click Cancel to exit."), QMessageBox::Ok);
+        return false;
+    }
+
+    QSqlQuery query;
+    query.exec("SELECT * FROM 'DDCData'");
+
+
+    return true;
 }
 
 //---Style
@@ -1312,7 +1361,7 @@ void MainWindow::update(int d){
         else if(obj==ui->barkcon)pre = "Level ";
         else if(obj==ui->barkfreq)post = "Hz";
         //Convolver
-        else if(obj==ui->convcc)post = "%";        
+        else if(obj==ui->convcc)post = "%";
         //Compressor
         else if(obj==ui->comp_ratio)post = "%";
         else if(obj==ui->compgain)post = "%";
