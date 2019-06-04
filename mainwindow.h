@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <QSqlTableModel>
+#include <QItemSelection>
 using namespace std;
 namespace Ui {
 class MainWindow;
@@ -43,6 +44,7 @@ public slots:
     void Restart();
     void reloadConfig();
 private slots:
+    void updateDDC(const QItemSelection &, const QItemSelection &);
     void OpenPreset();
     void CopyEQ();
     void PasteEQ();
@@ -71,6 +73,7 @@ private:
     string getComp();
     string getMisc();
     string getDynsys();
+    string getDDC();
     void ConnectActions();
     void SetStyle();
     bool is_only_ascii_whitespace(const string&);

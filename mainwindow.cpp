@@ -98,6 +98,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->ddcTable->setColumnHidden(4, true);
     ui->ddcTable->setColumnHidden(5, true);
     ui->ddcTable->setColumnHidden(6, true);
+
+
     SetStyle();
     ConnectActions();
 }
@@ -105,6 +107,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::updateDDC(const QItemSelection &item, const QItemSelection &item2){
+    OnUpdate();
 }
 
 bool MainWindow::createconnection()
@@ -222,6 +228,7 @@ void MainWindow::ConfirmConf(){
     config += getComp();
     config += getMisc();
     config += getDynsys();
+    config += getDDC();
 
     ofstream myfile(path);
     if (myfile.is_open())
@@ -753,6 +760,15 @@ void MainWindow::loadConfig(const string& key,string value){
         ui->dyn_sidegain2->setValue(std::stoi(value));
         break;
     }
+    case ddc_enable: {
+        if(value=="true") ui->ddc_enable->setChecked(true);
+        else ui->ddc_enable->setChecked(false);
+        break;
+    }
+    case ddc_coeffs: {
+        //Not (yet) supported
+        break;
+    }
     case unknown: {
         cout << "Config-List Enum: Unknown" << endl;
         break;
@@ -1112,6 +1128,28 @@ string MainWindow::getDynsys() {
     out += to_string(ui->dyn_sidegain2->value()) + n;
     return out;
 }
+string MainWindow::getDDC() {
+    string out;
+    string n = "\n";
+    string esc = "\"";
+
+    QItemSelectionModel *select = ui->ddcTable->selectionModel();
+    QString ddc_coeffs="0";
+    if(select->hasSelection()){
+        int index = select->selectedRows().first().row();
+        ddc_coeffs = ui->ddcTable->model()->data(ui->ddcTable->model()->index(index,5)).toString();
+        ddc_coeffs.replace(",",";");
+        ddc_coeffs.replace(".",",");
+    }
+    //DDC
+    out += "ddc_enable=";
+    if(ui->ddc_enable->isChecked())out += "true" + n;
+    else out += "false" + n;
+
+    out += "ddc_coeffs=" + esc;
+    out += ddc_coeffs.toUtf8().constData() + esc + n;
+    return out;
+}
 
 //---EQ
 void MainWindow::setEQ(const int* data){
@@ -1453,6 +1491,8 @@ void MainWindow::ConnectActions(){
     connect(ui->conv_select, SIGNAL(clicked()), this, SLOT(OpenConv()));
     connect(ui->copy_eq, SIGNAL(clicked()), this, SLOT(CopyEQ()));
     connect(ui->paste_eq, SIGNAL(clicked()), this, SLOT(PasteEQ()));
+
+    connect(ui->ddcTable->selectionModel(),SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),this,SLOT(updateDDC(const QItemSelection &, const QItemSelection &)));
 
     connect(ui->cpreset, SIGNAL(clicked()), this, SLOT(OpenPreset()));
     connect(ui->set, SIGNAL(clicked()), this, SLOT(OpenSettings()));
