@@ -25,6 +25,8 @@ private slots:
     void updateIR();
     void updateIR_Fav();
     void selectFolder();
+    void inspectIrs();
+    void inspectFav();
 private:
     Ui::Convolver *ui;
 };

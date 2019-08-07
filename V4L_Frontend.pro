@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml network
+QT       += core gui xml network multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,6 +28,9 @@ CONFIG += c++11
 SOURCES += \
     converter.cpp \
     importandroid.cpp \
+    irs/inspect.cpp \
+    irs/qcustomplot.cpp \
+    irs/track.cpp \
     log.cpp \
         main.cpp \
         mainwindow.cpp \
@@ -40,6 +43,9 @@ SOURCES += \
 HEADERS += \
     converter.h \
     importandroid.h \
+    irs/inspect.h \
+    irs/qcustomplot.h \
+    irs/track.h \
     log.h \
         mainwindow.h \
     configlist.h \
@@ -52,6 +58,7 @@ HEADERS += \
 
 FORMS += \
     importandroid.ui \
+    irs/inspect.ui \
     log.ui \
         mainwindow.ui \
     palette.ui \

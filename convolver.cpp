@@ -1,6 +1,7 @@
 #include "convolver.h"
 #include "ui_convolver.h"
 #include "main.h"
+#include "irs/inspect.h"
 #include <QDir>
 #include <pwd.h>
 #include <unistd.h>
@@ -41,6 +42,8 @@ Convolver::Convolver(QWidget *parent) :
     connect(ui->files, SIGNAL(itemSelectionChanged()), this, SLOT(updateIR()));
     connect(ui->favorites, SIGNAL(itemSelectionChanged()), this, SLOT(updateIR_Fav()));
     connect(ui->fileSelect, SIGNAL(clicked()), this, SLOT(selectFolder()));
+    connect(ui->inspectIrs, SIGNAL(clicked()), this, SLOT(inspectIrs()));
+    connect(ui->inspectFav, SIGNAL(clicked()), this, SLOT(inspectFav()));
 
     ui->tabWidget->setCurrentIndex(mainwin->getConv_DefTab());
 }
@@ -52,6 +55,22 @@ Convolver::~Convolver()
 void Convolver::closeWindow(){
     mainwin->enableConvBtn(true);
     this->close();
+}
+void Convolver::inspectIrs(){
+    if(ui->files->selectedItems().count()<1)return;
+    const QString selection = QDir(ui->path->text()).filePath(ui->files->selectedItems().first()->text());
+
+    inspect *i = new inspect(nullptr,selection);
+    i->setModal(true);
+    i->show();
+}
+void Convolver::inspectFav(){
+    if(ui->favorites->selectedItems().count()<1)return;
+    QString selection = QDir(QDir::cleanPath(configpath + QDir::separator() + "irs_favorites")).filePath(ui->favorites->selectedItems().first()->text());
+
+    inspect *i = new inspect(nullptr,selection);
+    i->setModal(true);
+    i->show();
 }
 void Convolver::reload(){
     lockupdate=true;
